@@ -1,0 +1,42 @@
+# best epoch 50, best acc 83.25%
+model_path: checkpoint
+device: 5
+model: net.4BranchNet_with_tem2.Model
+data_format: fsd_all_npy # h5 # npy
+server: V100
+phase: train
+
+sample: 10
+batch_size: 8
+max_epoches: 50
+eff_input: 'JVB'
+#eval_epoch: None # 测试时读入的轮数
+# Model
+model_type: EfficientGCN-B2
+model_args:
+  stem_channel: 64
+  block_args: [[48,1,0.5],[24,1,0.5],[64,2,1],[128,2,1]]
+  block_joint_args: [[48,1,0.5],[24,1,0.5]]
+  fusion_stage: 2
+  act_type: swish
+  att_type: stja
+  layer_type: Sep
+  drop_prob: 0.5
+  kernel_size: [5,2]
+  scale_args: [1.2,1.35]
+  expand_ratio: 2
+  reduct_ratio: 4
+  bias: True
+  edge: True
+
+
+optim: 'SGD' # Momentum
+
+lr: 0.1
+weight_decay: 0.0001
+lr_factor: 0.1
+workers: 8
+step: [25, 45, 60] # [25, 35, 60]
+num_joint: 25  # 20 # 25
+num_classes: 30  # 10 # 60
+save_interval: 1
